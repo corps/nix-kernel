@@ -1,14 +1,16 @@
 { 
   pkgs ? import <nixpkgs> {}, 
-  fetchFromGitHub ? pkgs.fetchFromGitHub, 
-  writeScriptBin ? pkgs.writeScriptBin }:
+  writeScriptBin ? pkgs.writeScriptBin,
+  python ? pkgs.python35 }:
 
-with pkgs.python35Packages;
+# If you are using callPackage to invoke this, ensure that python attribute is set to atleast a python >= 3.5
+
+with python.pkgs;
 
 let
 
 nix-kernel = buildPythonPackage rec {
-  version = "0.1.0";
+  version = "0.1.1";
   pname = "nix-kernel";
   name = "${pname}-${version}";
 
@@ -25,10 +27,8 @@ nix-kernel = buildPythonPackage rec {
   src = ./.;
 };
 
-env = pkgs.python.buildEnv.override {
-  extraLibs = let p = pkgs.python35Packages; in [ nix-kernel notebook ];
-  ignoreCollisions = true;
-};
+
+env = python.withPackages (ps: with ps; [ nix-kernel notebook ]);
 
 in
 
