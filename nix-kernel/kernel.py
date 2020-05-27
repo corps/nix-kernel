@@ -56,7 +56,7 @@ class NixKernel(Kernel):
     @property
     def banner(self):
         if self._banner is None:
-            self._banner = check_output(['nix-repl', '--version']).decode('utf-8')
+            self._banner = check_output(['nix', 'repl', '--version']).decode('utf-8')
         return self._banner
 
     language_info = {'name': 'nix',
@@ -74,7 +74,7 @@ class NixKernel(Kernel):
         # so that bash and its children are interruptible.
         sig = signal.signal(signal.SIGINT, signal.SIG_DFL)
         try:
-            child = pexpect.spawn("nix-repl", [], echo=False, encoding='utf-8', codec_errors='replace')
+            child = pexpect.spawn('nix repl', [], echo=False, encoding='utf-8', codec_errors='replace')
             prompt       = u'nix-repl> '
             continuation = u'          '
             self.wrapper = IncrementalOutputWrapper(child, prompt, None,

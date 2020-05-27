@@ -1,7 +1,7 @@
 { 
   pkgs ? import <nixpkgs> {}, 
   writeScriptBin ? pkgs.writeScriptBin,
-  python ? pkgs.python35 }:
+  python ? pkgs.python3 }:
 
 # If you are using callPackage to invoke this, ensure that python attribute is set to atleast a python >= 3.5
 
@@ -34,6 +34,6 @@ in
 
 writeScriptBin "nix-kernel" ''
 #! ${pkgs.bash}/bin/bash
-PATH=${pkgs.nix-repl}/bin:${env}/bin:$PATH
+PATH=${pkgs.nix}/bin/:${env}/bin:$PATH
 exec python -m nix-kernel $@
 ''
